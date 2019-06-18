@@ -20,7 +20,6 @@ def make_prediction(df_ts, cv_score=True):
         )
         perf_df = performance_metrics(cv_df)
         cv_score = perf_df["mape"].to_list()
-        import pdb; pdb.set_trace()
     future = model.make_future_dataframe(periods=20)
     forecast = model.predict(future)
     forecast_df = forecast[["ds", "yhat"]][-30:]
