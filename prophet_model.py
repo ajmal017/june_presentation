@@ -11,15 +11,16 @@ def format_forecast(results):
     return formatted
 
 
-def make_prediction(df_ts, cv_score=0):
+def make_prediction(df_ts, cv_score=True):
     model = Prophet()
     model.fit(df_ts)
     if cv_score:
         cv_df = cross_validation(
-            m, initial=f"{len(df_ts)} days", period="10 days", horizon="30 days"
+            model, initial=f"{len(df_ts)} days", period="10 days", horizon="30 days"
         )
         perf_df = performance_metrics(cv_df)
         cv_score = perf_df["mape"].to_list()
+        import pdb; pdb.set_trace()
     future = model.make_future_dataframe(periods=20)
     forecast = model.predict(future)
     forecast_df = forecast[["ds", "yhat"]][-30:]
